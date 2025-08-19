@@ -1,0 +1,16 @@
+// The common.proto file contains shared message definitions used across multiple services.
+// This helps to avoid code duplication and ensures consistency throughout the API.
+syntax = "proto3";
+
+option go_package = "go-proto-pkg/gen/go";
+
+package tinyurl.v1;
+
+// PingRequest is used as a request message for health check RPCs.
+message PingRequest {}
+
+// PingResponse is a response message for health check RPCs,
+// containing a status message.
+message PingResponse {
+  string response = 1;
+}

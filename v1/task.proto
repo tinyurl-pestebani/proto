@@ -1,0 +1,22 @@
+// The task.proto file defines messages for asynchronous tasks.
+syntax = "proto3";
+
+option go_package = "go-proto-pkg/gen/go";
+
+package tinyurl.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Task is a message representing a single task to be processed.
+message Task {
+  oneof task {
+    // InsertRecord is a task to insert a new visit to an url.
+    InsertRecord t1 = 1;
+  }
+}
+
+// InsertRecord is a task message for inserting a new record.
+message InsertRecord {
+  string tag = 1;
+  google.protobuf.Timestamp time = 2;
+}

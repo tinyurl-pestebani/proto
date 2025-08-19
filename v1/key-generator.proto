@@ -1,0 +1,25 @@
+// The key-generator.proto file defines the service for generating unique keys.
+syntax = "proto3";
+
+option go_package = "go-proto-pkg/gen/go";
+
+package tinyurl.v1;
+
+// Import the common message types for health check RPCs.
+import "v1/common.proto";
+
+// The KeyGeneratorService provides methods for key generation.
+service KeyGeneratorService {
+  // Ping is a health check RPC to ensure the service is running.
+  rpc Ping (PingRequest) returns (PingResponse);
+  // GenerateKey is an RPC that creates a new unique key.
+  rpc GenerateKey (GenerateKeyRequest) returns (GenerateKeyResponse);
+}
+
+// GenerateKeyRequest is the request message for the GenerateKey RPC.
+message GenerateKeyRequest {}
+
+// GenerateKeyResponse is the response message containing the newly generated key.
+message GenerateKeyResponse {
+  string key = 1;
+}

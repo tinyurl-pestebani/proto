@@ -1,0 +1,53 @@
+// The statistics.proto file defines the service for retrieving statistics.
+syntax = "proto3";
+
+option go_package = "go-proto-pkg/gen/go";
+
+package tinyurl.v1;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+import "v1/common.proto";
+
+// The StatisticsService provides methods for retrieving statistical data.
+service StatisticsService {
+  // Ping is a health check RPC to ensure the service is running.
+  rpc Ping (PingRequest) returns (PingResponse);
+  // GetStatistics retrieves a stream of statistics points based on a query.
+  rpc GetStatistics (GetStatisticsRequest) returns (stream GetStatisticsResponse);
+}
+
+// GetStatisticsRequest is the request message for the GetStatistics RPC.
+// It allows filtering statistics by a tag and a time interval.
+message GetStatisticsRequest {
+  string tag = 1;
+  google.protobuf.Timestamp interval_start = 2;
+  google.protobuf.Timestamp interval_end = 3;
+  google.protobuf.Duration interval_duration = 4;
+  // tz identifier, for example:	Europe/Madrid, America/Los_Angeles ...
+  // See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  optional string timezone = 5;
+}
+
+// GetStatisticsResponse is a message that can contain either summary stats
+// or a single statistic point.
+message GetStatisticsResponse {
+  oneof statistics_response_one_of {
+      GetStatisticsStats stats = 1;
+      StatisticPoint statistic_point = 2;
+  }
+}
+
+// GetStatisticsStats contains overall statistics about the query result.
+message GetStatisticsStats {
+  uint32 total_points = 1;
+}
+
+// StatisticPoint represents a single data point within a time interval.
+message StatisticPoint {
+  google.protobuf.Timestamp interval_start = 1;
+  google.protobuf.Timestamp interval_end = 2;
+  google.protobuf.Duration interval_duration = 3;
+  uint32 total_visits = 4;
+}
